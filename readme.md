@@ -37,3 +37,18 @@ IP:
 
 
 * H_VIEW_PORT = Listening PORT
+
+
+## Formats 
+Add URL param ?format=json to the request and hview will return a json result 
+```json {
+"Time": "2022-08-08T23:08:09+02:00",
+"Headers": {
+"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+"Accept-Encoding": "gzip, deflate, br",
+"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36"
+},
+"IP": "[::1]:65293"
+}```
+
+
