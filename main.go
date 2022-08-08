@@ -1,17 +1,57 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"os"
 	"time"
 )
 
+type HViewResult struct {
+	Time    string
+	Headers map[string]string
+	IP      string
+}
+
+func (h *HViewResult) Writer() (int, error) {
+	return 0, nil
+}
+
+func jsonHeaders(w http.ResponseWriter, req *http.Request) {
+	// return the same as headers but in json format
+
+	headerMap := make(map[string]string)
+
+	for name, headers := range req.Header {
+		for _, h := range headers {
+			headerMap[name] = h
+		}
+	}
+
+	hv := HViewResult{
+		Time:    time.Now().Format(time.RFC3339),
+		IP:      req.RemoteAddr,
+		Headers: headerMap,
+	}
+
+	res, _ := json.Marshal(hv)
+
+	w.Write(res)
+
+}
+
 func headers(w http.ResponseWriter, req *http.Request) {
 	// This handler does something a little more sophisticated by reading all the HTTP request headers and echoing them into the response body.
 
-	fmt.Fprintf(w, "Hview\n\n\n")
+	json := req.URL.Query().Get("format")
 
+	if json == "json" {
+		jsonHeaders(w, req)
+		return
+	}
+
+	fmt.Fprintf(w, "Hview\n\n")
 	fmt.Fprintf(w, "Time:\n-------------------\n")
 	fmt.Fprintf(w, "%s\n\n", time.Now().Format(time.RFC3339))
 	fmt.Fprintf(w, "Header:\n-------------------\n")
