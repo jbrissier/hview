@@ -21,6 +21,7 @@ func (h *HViewResult) Writer() (int, error) {
 func jsonHeaders(w http.ResponseWriter, req *http.Request) {
 	// return the same as headers but in json format
 
+	w.Header().Set("Content-Type", "application/json")
 	headerMap := make(map[string]string)
 
 	for name, headers := range req.Header {
