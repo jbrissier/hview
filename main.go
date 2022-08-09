@@ -42,16 +42,7 @@ func jsonHeaders(w http.ResponseWriter, req *http.Request) {
 
 }
 
-func headers(w http.ResponseWriter, req *http.Request) {
-	// This handler does something a little more sophisticated by reading all the HTTP request headers and echoing them into the response body.
-
-	json := req.URL.Query().Get("format")
-
-	if json == "json" {
-		jsonHeaders(w, req)
-		return
-	}
-
+func textHeaders(w http.ResponseWriter, req *http.Request) {
 	fmt.Fprintf(w, "Hview\n\n")
 	fmt.Fprintf(w, "Time:\n-------------------\n")
 	fmt.Fprintf(w, "%s\n\n", time.Now().Format(time.RFC3339))
@@ -63,6 +54,19 @@ func headers(w http.ResponseWriter, req *http.Request) {
 	}
 	fmt.Fprintf(w, "\nIP:\n-------------------\n")
 	fmt.Fprintf(w, "%s\n", req.RemoteAddr)
+}
+
+func headers(w http.ResponseWriter, req *http.Request) {
+	// This handler does something a little more sophisticated by reading all the HTTP request headers and echoing them into the response body.
+
+	json := req.URL.Query().Get("format")
+
+	if json == "json" {
+		jsonHeaders(w, req)
+		return
+	}
+	// return as text
+	textHeaders(w, req)
 }
 
 func main() {
